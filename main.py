@@ -5,6 +5,9 @@ import sys
 
 
 class App(object):
+    nc = NATS
+    sub = Sub
+
     def __init__(self):
         self.nc = NATS()
         self.sub = None
@@ -12,9 +15,6 @@ class App(object):
         # Registering the signals
         signal.signal(signal.SIGINT, self.exit_graceful)
         signal.signal(signal.SIGTERM, self.exit_graceful)
-
-    nc = NATS
-    sub = Sub
 
     def exit_graceful(self, signum, frame):
         print('Received:', signum, ": ", frame)
@@ -32,7 +32,7 @@ class App(object):
         return await self.nc.publish(m.reply, b'secretpassword')
 
     async def run(self):
-        print("running App: ")
+        print("running App, awaiting messages: ")
 
         while True:
             await asyncio.sleep(1)
